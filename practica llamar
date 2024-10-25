@@ -170,7 +170,27 @@ def mostrarDatos(self):
 curso_nuevo = Curso3("Español", "primaria", "facil", 10)
 print(curso_nuevo.carrera)
 
+####################################################################################
+###################### Practica de importaciono de modulos #########################
 
 
+def funcion_yahoo():
+    print("aqui hay apis de yahoo")
+
+def saludar():
+    print("hola")
+    
+def decir_hola():
+    print("Hola Mundo")
+
+def funcion_lista():
+    x = [1,2,4,45,6]
+    return x
+
+
+class Punto:
+ def __init__(self):
+        print("Esto es el init")
+        
 
 
