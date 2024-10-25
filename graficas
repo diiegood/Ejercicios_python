@@ -1,0 +1,59 @@
+"Graficar en python"
+
+import matplotlib.pyplot  as plt  #modulo para poder graficar y configurarlas
+import numpy as np  #nos permite trabajar con estructuras de datos, arreglos multidimencionales
+
+#Se crea un arreglo con numpy que va desde -5 hasta 5  con incmrenetos de 0.5
+x = np.arange(-5,5,0.5) 
+y = np.cos(x) #se genera una funcion trigonometrica para la funcion creada anteriormente
+
+plt.plot(x, y) #se genera la funcion para graficar (plt.plot("funcion de x", "funcion de y"))
+
+"Se puede ver que con los datos anteriores se genera una funcion "
+#que comparte 2 valores / la relacion con x es que va desde -5 hasta 5 con incrementos de 0.5
+#por el lado de y esta es una funcion coseno que esta correlacionada a x
+
+###############################################################################
+"Especificar las graficas y definir con mejores caracteristicas"
+
+#argumento para etiquetar la grafica, se usa el argumento label
+plt.plot(x, y, label="Funcion coseno (x)", color="green") #se agrega una etiqueta para la funcion de x3
+
+#funciones de caracteristicas de la grafica
+"label =" #para poner etiqueta ala funcion de la grafica de la correlacion x:y
+"color=" #para personalizar el color de la grafica
+
+
+plt.legend()   #se debe mandar llamar esta funcion para que las etiquetas colocadas aparezcan
+
+"Señalizacion de los ejes X / Y"
+
+plt.xlabel("Valores de X", c="red")  #se le pone etiqueta al eje de X / se le pone color
+plt.ylabel("Valores de Y", c="purple")  #se le pone etiqueta al eje de y / se le pone color
+
+###############################################################################
+"COLOCAR ANOTACION EN LUGARES ESPECIFICOS DE LA GRAFICA PARA DETERMINAR SUCESOS"
+
+#Se genera una funcion para poder poner la nota en el punto especifico de la grafica
+#Se pone (nombre de la etiqueta, coordenada(posicion coordenada))
+plt.annotate("Segundo Minimo de la funcion", xy=(3,-1)) #la coordenada se ingresa como una dupla en parentesis
+plt.annotate("Maximo de la funcion", xy=(0,1)) #se ingresa una nueva etiqueta de otra coordenada
+
+"Tambien se puede desplazar el texto para indicar donde se quiere poner la etiqueta de la coordenada"
+#Permite tener una imagen mas limpia y personalizada
+#Se pone (nombre de la etiqueta, coordenada(posicion coordenada), indicar donde poner el texto(coordenada))
+
+plt.annotate("primer minimo", xy=(-3,-1), xytext=(-0,-0.50))
+#En esta funcion es igual a la anterior solo que se indica donde se quiere poner la etiqueta de la coordenada
+
+#para aparecer un marcador tipo flecha / funcion "arrowprops="
+plt.annotate("primer minimo", xy=(-3,-1), xytext=(-0,-0.50), arrowprops=dict(arrowstyle = "->"))
+#en este comando se pone una señalizacion grafica de donde esta el minimo
+
+"Tipos de arrowstyle"  #señalizadores fisicos para la grafica
+#(- ,<- ,-> ,<-> ,<|- ,-|> ,<|-|> ,]- ,-[ ,]-[ ,|-| ,]-> ,<-[ ,simple, fancy, wedge, )
+
+#FUNCION PARA COLOCAR UNA CUADRICULA EN LA GRAFICA / valor de caracter boleano
+plt.grid() #para que salga una cuadricula en la grafica 
+
+
