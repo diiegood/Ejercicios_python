@@ -1,0 +1,37 @@
+"T- Test "
+#test de prueba t .
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import ttest_ind
+from scipy.stats import t
+
+
+df = pd.read_csv("https://raw.githubusercontent.com/selva86/datasets/master/footfalls.csv")
+tscore, pvalue = ttest_ind(df.Loc_A, df.Loc_B)
+print("t Statistic: ", tscore)  
+print("P Value: ", pvalue)
+
+#> t Statistic:  2.1161
+#> P Value:  0.0485
+# Compute P Value explicitly (Python)
+
+t_dist = t(18)
+2 * t_dist.cdf(-2.1161)
+#> 0.048532
+
+#para graficar 
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=df[['Loc_A', 'Loc_B']])
+plt.title('Comparación de Footfalls entre Loc_A y Loc_B')
+plt.ylabel('Número de Footfalls')
+plt.xticks([0, 1], ['Loc_A', 'Loc_B'])
+plt.grid(axis='y')
+
+# Añadir líneas de significancia
+if pvalue < 0.05:
+    plt.text(0.5, df[['Loc_A', 'Loc_B']].max().max() + 5, 'Significativo (p < 0.05)', 
+             horizontalalignment='center', color='red')
+
+plt.show()
