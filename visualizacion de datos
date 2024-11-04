@@ -1,0 +1,143 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import subplots #modulo suplot para graficar mas de 1 elemento
+from matplotlib.pylab import gca
+plt.figure() #configuracion de figura
+
+x =  np.arange(0,20,0.01)
+y=np.sin(x)
+plt.plot(x,y)
+plt.show()
+
+def f(x):  #los dos puntos indica donde incia la funcion
+    return np.sin(x) 
+x=np.linspace(0,20,100) #valor incial, valor final, numero de elementos
+y=f(x)   #aplicamos la funcion definida en las lienas anteriores
+plt.figure()  #entorno de figura
+plt.plot(x,y, label="y = sin(x)") #graficamos x-y, etiqueta
+plt.xlabel("Valores de x")  #etiqueta de eje horizontal
+plt.ylabel("Valores de seno (x)")  #etiqueta del eje vertical
+plt.title("Grafica de seno(x)") #titulo del grafico
+plt.legend() #se llama la leyenda
+plt.show  #se llama la funcion
+ 
+
+#se genera una nueva grafica con nuevos datos
+x=np.arange(0,20,0.95)
+y=x**1
+plt.plot(x,y)
+plt.show()
+
+fig,ax= subplots()  #activamos subplots
+ax.plot(x,y,x,2*y, "r--")   #generamos los graficos, par en par, el formato secundario
+ax.legend(("funcion_x","funcion 2*y"),loc= "best") #leyenda ubicada en el mejor lugar posible
+plt.xlabel("Valores de x")
+plt.ylabel("Valores de f(x)")
+plt.title("Grafica de valores de x")
+plt.show
+
+###############################################################################
+
+fig,ax=subplots(2,1)
+ax[0].plot(x,np.cos(x),'r--')
+ax[1].plot(x,np.sin(x),'b--')
+plt.show()
+
+
+fig,ax=subplots()                     #Activamos los subplots
+ax.plot(x,np.cos(x),x,np.sin(x),'r--')              #Generamos los gráficos, par en par, el formato del secundario
+ax.legend(('cos(x)', 'seno(x)'),loc='best')  #Leyenda ubicada en el mejor lugar posible
+plt.xlabel("Valores de x")            #Etiqueta
+plt.ylabel("Funciones de x")         #Etiqueta
+plt.title("Grafica de las funciones seno y coseno de x")  #Titulo
+plt.show()
+
+
+fig,axs = subplots(2,2)
+x = np.linspace(-np.pi,np.pi,100)
+y = 2*np.sin(x)
+ax = axs[0,0]
+ax.set_title('centered spines')
+ax.plot(x,y)
+ax.spines['left'].set_position('center')
+ax.spines['right'].set_color('none')
+ax.spines['bottom'].set_position('center')
+ax.spines['top'].set_color('none')
+ax.xaxis.set_ticks_position('bottom')
+ax.yaxis.set_ticks_position('left')
+ax = axs[1,0]
+ax.set_title('zeroed spines')
+ax.plot(x,y)
+ax.spines['left'].set_position('zero')
+ax.spines['right'].set_color('none')
+ax.spines['bottom'].set_position('zero')
+ax.spines['top'].set_color('none')
+ax.xaxis.set_ticks_position('bottom')
+ax.yaxis.set_ticks_position('left')
+ax = axs[0,1]
+ax.set_title('spines at axes (0.6, 0.1)')
+ax.plot(x,y)
+ax.spines['left'].set_position(('axes',0.21))
+ax.spines['right'].set_color('none')
+ax.spines['bottom'].set_position(('axes',0.05))
+ax.spines['top'].set_color('none')
+ax.xaxis.set_ticks_position('bottom')
+ax.yaxis.set_ticks_position('left')
+
+###############################################################################
+
+fig,axs=subplots(3,1,sharex=True,sharey=True)
+t=np.arange(0.0,2.0,0.01)
+s1=np.sin(2*np.pi*t)
+s2=np.exp(-t)
+s3=s1*s2
+axs[0].plot(t,s1)
+axs[1].plot(t,s2)
+axs[2].plot(t,s3)
+plt.show()
+
+fig,ax = subplots()
+# line in data coordinates
+ax.plot(np.arange(10), np.arange(10))
+# marks the middle in data coordinates
+ax.plot(5,5,'o',markersize=10,color='r')
+# show the same point but in display coordinates
+
+
+fig,ax = subplots()
+ax.text(0.5,0.5,
+  'Middle of plot',
+  transform = ax.transAxes,
+  fontsize=18)
+ax.text(0.1,0.1,
+  'lower left',
+  transform = ax.transAxes,
+  fontsize=18)
+ax.text(0.8,0.8,
+  'upper right',
+  transform = ax.transAxes,
+  fontsize=18)
+ax.text(0.1,0.8,
+  'upper left',
+  transform = ax.transAxes,
+  fontsize=18)
+ax.text(0.8,0.1,
+  'lower right',
+  transform = ax.transAxes,
+  fontsize=12)
+
+###############################################################################
+fig,ax = subplots()
+x = linspace(0,2*pi,100)
+ax.plot(x,sin(x) )
+ax.add_patch(Rectangle((0.15,0),
+  width = 0.2,
+  height = 0.7,
+  color='r',
+  alpha=0.5,
+  transform = ax.transAxes))
+ax.axis('equal')
+
+
+
+
