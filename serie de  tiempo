@@ -1,0 +1,113 @@
+"Practica de crear funciones"
+"primera funcion serie de tiempo"
+"segunda funcion volatilidad y rendimiento o retorno promedio"
+"tercera funcion graficar los resultados y rendimientos"
+
+###############################################################################
+
+import pandas as pd #se puede calcular la media de bases de datos
+import numpy as np
+import matplotlib.pyplot as plt
+import importlib
+import scipy.stats as st 
+
+def load_timeseries(ric):
+    directorio = 'C:\\Users\\creep\\.spyder-py3\\stocks\\'
+    path = directorio + ric + ".csv"
+    
+    # Cargar los datos del CSV
+    raw_data = pd.read_csv(path)
+    
+    # Crear DataFrame para los datos
+    t = pd.DataFrame() #t es el nombre del data frame creado
+    #en el data frame vacio se va agregar los datos del path de la ruta del directorio
+    #se le va agregar al data frame:
+        
+    #fecha
+    #precio cierre
+    #cierre del rendimiento
+    
+    t["Date"] = pd.to_datetime(raw_data["Date"], dayfirst= True) 
+    #dayfirst = True ("indica como interpretar la fecha en el formato dia/mes/año")
+    t["close"] = raw_data["Close"] #leer el vector de cierre de precio del data frame
+    
+    # Ordenar por fecha
+    t = t.sort_values(by="date", ascending=True)
+    #Esta funcion 
+    
+    # Calcular el cierre anterior y el retorno
+    t["close_previous"] = t["close"].shift(1) 
+    #crea una nueva columna llamada close previous en el DataFrame, donde cada valor de la columna  sera close
+    #cambia el ultimo valor del data frame lo quita y agrega uno al primero.
+    t["return_close"] = t["close"] / t["close_previous"] - 1 
+    #se genera el vector (return_close), para calcular el rendimiento:
+        #dividiendo el precio de (cierre actual / precio de cierre anterior) restando el valor de 1
+    
+    # Eliminar filas con NaN y resetear el índice
+    t = t.dropna() #para limpiar el data frame t de los Nan
+    t = t.reset_index(drop = True) #se  busca restablecer el indice del DataFrame a un rango numerico 
+    #drop true = es para que pandas no agrege la columna del indice antiguo
+    #("en el caso de darle ("drop = false") se le agregaria una nueva columna del indice antiguo al DataFrame")
+    return t
+
+def compute_average_return_and_volatility(ric):
+    # Cargar los datos de la serie temporal
+    data = load_timeseries(ric)
+    decimals = 6 #antes de return redondea a 6 decimales.
+    
+    t=load_timeseries(ric) #para cargar la funcion anterior con el ric
+    x= t["return_close"].values
+    
+    # Calcular el retorno promedio y la volatilidad
+    #se calcula la medai de x siendo los retornos de cierre con 6 decimales
+    average_return = np.round(np.mean(x),decimals) 
+    volatility = np.round(np.std(x), decimals)
+    # Redondear a 6 decimales (funcion "np.round")
+    # funcion al final decimals indicadnod a cuantos decimales siendo  6.
+    return average_return, volatility
+
+
+def plot_timeseries(ric): #para graficar la serie de tiempo.
+    data = load_timeseries(ric)
+    
+    # Crear un gráfico para el precio de cierre
+    plt.figure(figsize=(15, 8))
+    
+    # Gráfico de precios de cierre
+    plt.subplot(2, 1, 1)
+    plt.plot(data["Date"], data["close"], label='Precio de Cierre', color='blue')
+    plt.title(f'Precio de Cierre de {ric}')
+    plt.xlabel('Fecha')
+    plt.ylabel('Precio')
+    plt.legend()
+    plt.grid()
+
+    # Gráfico de retornos
+    plt.subplot(2, 1, 2)
+    plt.plot(data["Date"], data["return_close"], label='Retorno Diario', color='orange')
+    plt.title(f'Retorno Diario de {ric}')
+    plt.xlabel('Fecha')
+    plt.ylabel('Retorno')
+    plt.legend()
+    plt.grid()
+
+    plt.tight_layout()
+    plt.show()
+
+# Ejemplo de uso
+ric = "AAPL"  # Reemplaza esto con el RIC que desees analizar
+average_return, volatility = compute_average_return_and_volatility(ric)
+print(f'Retorno Promedio: {average_return}, Volatilidad: {volatility}')
+
+# Graficar los datos
+plot_timeseries(ric)
+
+
+
+
+
+
+
+
+
+
