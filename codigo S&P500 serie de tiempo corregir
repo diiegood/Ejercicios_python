@@ -1,0 +1,88 @@
+"Practica de medias moviles, pronosticos de Series de Tiempo"
+
+"SMA  Simple Moving Average / Media Movil Simple"
+
+#se importan paqueterias
+import yfinance as yf
+import pandas as pd
+from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+
+#Se define el ticker de la accion
+ticker = "SPY"
+ticker2 = "NAFTRAC"
+
+start_date = (datetime.today()-timedelta(days=3650)).strftime("%Y-%m-%d")
+end_date = datetime.today().strftime("%Y-%m-%d")
+
+#En la variable va el historico
+
+data = yf.download(ticker, start=start_date, end= end_date)
+data
+
+#indicadores de medias moviles
+long_sma = 40
+short_sma = 10
+
+dias = long_sma
+sma_long_colname = "SMA_"  + str(dias)
+data[sma_long_colname] = data["Close"].rolling(window=dias).mean()
+delta_sma_long_colname = "d_" + sma_long_colname
+data[delta_sma_long_colname] = ((data[sma_long_colname]- data[sma_long_colname].shift(1))
+                                /data[sma_long_colname])
+
+dias = short_sma
+sma_short_colname = "SMA_"  + str(dias)
+data[sma_short_colname] = data["Close"].rolling(window=dias).mean()
+delta_sma_short_colname = "d_" + sma_short_colname
+data[delta_sma_short_colname] = ((data[sma_short_colname]- data[sma_short_colname].shift(1))
+                                /data[sma_short_colname])
+
+data #cuadro original
+
+#se genera un cuadro nuevo limpio 
+data2 = data.dropna()
+data2
+
+data = data2.tail(360)
+data
+
+#se puede exportar a excel con 
+#excel_filename = "DATA/" + ticker + "_historico_precios3.xlsx"
+#data.to_excel(excel_filename)
+
+#para poner indicadores de compra y venta
+data["Recomendacion"]="Esperar" 
+data.loc[(data[delta_sma_long_colname]>0) & (data[delta_sma_short_colname]>0), "Recomendacion"] = "Compra"
+data.loc[(data[delta_sma_long_colname]<0) & (data[delta_sma_short_colname]<0), "Recomendacion"] = "Venta"
+
+
+#para graficar
+
+fig, ax= plt.subplots(figsize=(12,6))
+ax.plot(data.index, data[sma_short_colname], label=sma_short_colname, linestyle="-", linewidth=2, color="orange")
+ax.plot(data.index, data[sma_long_colname], label=sma_long_colname, linestyle="-", linewidth=2, color="blue")
+ax.plot(data.index, data["Close"], label="Close", linestyle="--", linewidth=1, color="black")
+
+#configurar la grafica con mas opciones
+ax.set_title(f'Grafico de SMA {short_sma}, SMA{long_sma} y Close para {ticker}')
+ax.set_xlabel("Fecha")
+ax.set_ylabel("Precio")
+plt.show()
+
+"Corregir esta parte"
+#para ponder indicadores de tendencia: 
+for index, row in data.iterrows():
+    
+    color = "black"
+    if row ["Recomendacion"] == "Compra":
+        color ="green"
+    if row ["Recomendacion"] == "Vender":
+        color ="red"
+    if color != "black":
+        ax.plot(index, row["Close"], marker="o", markersize=4, color=color)
+
+
+#tarea suponer poner la grafica del IPC sobre esta.
+
+
